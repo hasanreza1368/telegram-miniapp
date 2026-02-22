@@ -493,6 +493,60 @@
             color: #fff;
             box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
         }
+
+        /* افکت‌های دکمه لغو سرویس */
+        .btn-refund {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            /* گرادیانت قرمز/زرشکی لوکس */
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.2);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* انیمیشن پرش و سایه هنگام رفتن موس روی دکمه */
+        .btn-refund:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.5);
+        }
+
+        /* خط نوری که داخل دکمه حرکت میکند */
+        .btn-refund::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            animation: shineLight 3s infinite;
+        }
+
+        /* کلیدواژه انیمیشن نور */
+        @keyframes shineLight {
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
+        }
     </style>
 </head>
 
@@ -748,6 +802,11 @@
                         </button>
                         <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=rn_${srv.id}'); window.Telegram.WebApp.close();" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
                             تمدید سرویس 🔄
+                        </button>
+                        // این کد را زیر دیو (div) دکمه‌های دریافت لینک و تمدید قرار دهید:
+
+                        <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=rf_${srv.id}'); window.Telegram.WebApp.close();" class="btn-refund">
+                          لغو سرویس و بازگشت وجه 💸
                         </button>
                     </div>
                 </div>
