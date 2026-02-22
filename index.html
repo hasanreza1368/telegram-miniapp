@@ -603,28 +603,43 @@
                 }
             });
         }
-        // تابع باز کردن مودال سرویس‌ها و شبیه‌سازی دریافت اطلاعات
-        // تابع باز کردن پنل با انیمیشن
+        // تابع باز کردن پنل و دریافت اطلاعات از ربات پایتون
         function openServicesModal() {
             const modal = document.getElementById('servicesModal');
             modal.style.display = 'block';
-            // تاخیر کوچک برای اجرای انیمیشن CSS
             setTimeout(() => {
                 modal.classList.add('show');
             }, 10);
 
-            document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">در حال دریافت اطلاعات از سرور... ⏳</div>';
+            document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">در حال همگام‌سازی با سرور... ⏳</div>';
 
-            // دیتای تستی
-            const sampleDataFromPython = [
-                { id: "uuid-1", name: "کانفیگ VIP آلمان", isActive: true, used: 32, total: 50, percent: 64, expireDays: 12 },
-                { id: "uuid-2", name: "سرور هلند - بکاپ", isActive: false, used: 45, total: 50, percent: 90, expireDays: 2 }
-            ];
+            // 🟢 جادوی اصلی: خواندن دیتا از انتهای لینک (URL) که ربات پایتون ساخته است
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
 
             setTimeout(() => {
-                renderServices(sampleDataFromPython);
-            }, 1000);
+                if (encodedData) {
+                    try {
+                        // رمزگشایی دیتای ارسال شده از پایتون
+                        const jsonData = JSON.parse(decodeURIComponent(encodedData));
+
+                        if (jsonData.length === 0) {
+                            document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #ff4d4d; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">شما هنوز هیچ سرویس فعالی ندارید! ❌</div>';
+                        } else {
+                            // ارسال دیتای واقعی پایتون برای ساخت کارت‌ها
+                            renderServices(jsonData);
+                        }
+                    } catch (error) {
+                        document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: red; padding: 20px;">❌ خطا در خواندن اطلاعات سرور!</div>';
+                        console.error("Error parsing data from Python:", error);
+                    }
+                } else {
+                    // اگر کاربری مینی‌اپ را مستقیما از مرورگر باز کند (بدون ربات)
+                    document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">⚠️ ارتباط با ربات برقرار نشد. لطفا مینی‌اپ را از داخل ربات باز کنید.</div>';
+                }
+            }, 600); // یک تاخیر کوچک برای زیبایی بصری و لودینگ
         }
+
 
         // تابع جدید برای بستن پنل با انیمیشن
         function closeServicesModal() {
