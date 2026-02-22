@@ -437,10 +437,11 @@
     <div class="header">منوی اصلی 🏠</div>
 
     <div class="btn-grid">
-        <!-- در اینجا onclick برای باز کردن پنل لوکس تغییر کرده است -->
-        <button class="btn bg-myservices shimmer-lr" onclick="openModal('servicesModal')">
+        <!-- در اینجا onclick برای اجرای تابع ساخت کارت‌ها تغییر کرده است -->
+        <button class="btn bg-myservices shimmer-lr" onclick="openServicesModal()">
             <span>سرویس‌های من 👤</span>
         </button>
+
         <button class="btn bg-buy shimmer-rl" onclick="sendAction('buy')">
             <span>خرید سرویس 🛍</span>
         </button>
@@ -468,51 +469,59 @@
         </button>
     </div>
 
-    <!-- پنل کشویی سرویس‌های من -->
-    <div id="servicesModal" class="luxury-modal">
-        <div class="modal-drag-indicator"></div>
+    <!-- مودال سرویس‌های من -->
+    <div id="servicesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>سرویس‌های فعال من 👤</h2>
+                <span class="close-btn" onclick="closeModal('servicesModal')">✖</span>
+            </div>
+            <!-- این بخش الان خالی است و توسط جاوااسکریپت پر می‌شود -->
+            <div class="modal-body" id="services-container">
+                <div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: 'Vazirmatn', sans-serif;">
+                    در حال دریافت اطلاعات از سرور... ⏳
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="modal-header">
-            <div class="modal-title">👤 سرویس‌های فعال من</div>
-            <button class="close-modal-btn" onclick="closeModal('servicesModal')">✖</button>
+
+    <!-- این کارت به صورت نمونه طراحی شده است (در آینده دیتا از ربات می‌آید) -->
+    <div class="info-card">
+        <div class="info-row">
+            <span class="text-gray">نام سرویس:</span>
+            <span class="text-cyan">💎 کانفیگ VIP آلمان</span>
+        </div>
+        <div class="info-row">
+            <span class="text-gray">وضعیت:</span>
+            <span>🟢 <b style="color:#38ef7d">متصل و فعال</b></span>
         </div>
 
-        <!-- این کارت به صورت نمونه طراحی شده است (در آینده دیتا از ربات می‌آید) -->
-        <div class="info-card">
-            <div class="info-row">
-                <span class="text-gray">نام سرویس:</span>
-                <span class="text-cyan">💎 کانفیگ VIP آلمان</span>
+        <div style="margin-top: 20px;">
+            <div class="info-row" style="margin-bottom: 5px;">
+                <span class="text-gray">مصرف ترافیک (۳۲ از ۵۰ گیگ)</span>
+                <span class="text-cyan">۶۵٪</span>
             </div>
-            <div class="info-row">
-                <span class="text-gray">وضعیت:</span>
-                <span>🟢 <b style="color:#38ef7d">متصل و فعال</b></span>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <div class="info-row" style="margin-bottom: 5px;">
-                    <span class="text-gray">مصرف ترافیک (۳۲ از ۵۰ گیگ)</span>
-                    <span class="text-cyan">۶۵٪</span>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: 65%;"></div>
-                </div>
-            </div>
-
-            <div class="info-row" style="margin-top: 15px;">
-                <span class="text-gray">انقضا:</span>
-                <span style="color: #ffb86c">⏳ ۱۲ روز دیگر</span>
-            </div>
-
-            <div class="action-btn-group">
-                <button class="btn-sm-luxury btn-copy" onclick="copyToClipboard('vless://sample-link...')">📋 کپی
-                    لینک</button>
-                <button class="btn-sm-luxury btn-renew"
-                    onclick="tg.openTelegramLink('https://t.me/Mazhn_Network_bot?start=buy')">🔄 تمدید سرویس</button>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: 65%;"></div>
             </div>
         </div>
 
-        <!-- در صورت نداشتن سرویس (کامنت شده برای استفاده در آینده) -->
-        <!--
+        <div class="info-row" style="margin-top: 15px;">
+            <span class="text-gray">انقضا:</span>
+            <span style="color: #ffb86c">⏳ ۱۲ روز دیگر</span>
+        </div>
+
+        <div class="action-btn-group">
+            <button class="btn-sm-luxury btn-copy" onclick="copyToClipboard('vless://sample-link...')">📋 کپی
+                لینک</button>
+            <button class="btn-sm-luxury btn-renew"
+                onclick="tg.openTelegramLink('https://t.me/Mazhn_Network_bot?start=buy')">🔄 تمدید سرویس</button>
+        </div>
+    </div>
+
+    <!-- در صورت نداشتن سرویس (کامنت شده برای استفاده در آینده) -->
+    <!--
         <div style="text-align: center; margin-top: 50px; color: #aaa;">
             <span style="font-size: 3rem;">🪹</span>
             <p>شما هیچ سرویس فعالی ندارید!</p>
@@ -570,6 +579,80 @@
                 }
             });
         }
+        // تابع باز کردن مودال سرویس‌ها و شبیه‌سازی دریافت اطلاعات
+        function openServicesModal() {
+            openModal('servicesModal');
+            document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">در حال دریافت اطلاعات از سرور... ⏳</div>';
+
+            // در مراحل بعدی، این اطلاعات مستقیماً از فایل bot.py شما میاد. 
+            // فعلا ۲ تا دیتای تستی میدیم که ظاهر کار رو برای چند سرویس ببینیم.
+            const sampleDataFromPython = [
+                { id: "uuid-1", name: "کانفیگ VIP آلمان", isActive: true, used: 32, total: 50, percent: 64, expireDays: 12 },
+                { id: "uuid-2", name: "سرور هلند - بکاپ", isActive: false, used: 45, total: 50, percent: 90, expireDays: 2 }
+            ];
+
+            // شبیه‌سازی تاخیر اینترنت (بعد از 1 ثانیه کارت ها ساخته میشن)
+            setTimeout(() => {
+                renderServices(sampleDataFromPython);
+            }, 1000);
+        }
+
+        // تابع ساخت خودکار کارت‌های سرویس
+        function renderServices(servicesArray) {
+            const container = document.getElementById('services-container');
+            container.innerHTML = ''; // پاک کردن متن لودینگ
+
+            if (servicesArray.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px;">شما هیچ سرویس فعالی ندارید ❌</div>';
+                return;
+            }
+
+            servicesArray.forEach(srv => {
+                // رنگ و استایل بر اساس وضعیت فعال بودن
+                const statusClass = srv.isActive ? '' : 'style="color: #ff4d4d;"';
+                const dotColor = srv.isActive ? '#00ffcc' : '#ff4d4d';
+                const statusText = srv.isActive ? 'متصل و فعال' : 'غیرفعال / اتمام';
+                const progressColor = srv.percent >= 90 ? '#ff4d4d' : (srv.percent >= 70 ? '#ffcc00' : '#00ffcc');
+
+                const card = `
+                    <div class="info-card">
+                        <div class="card-row">
+                            <div class="service-name">${srv.name} 💎</div>
+                            <div class="service-label">نام سرویس:</div>
+                        </div>
+                        <div class="card-row">
+                            <div class="service-status">
+                                <span class="status-badge" ${statusClass}>
+                                    <span class="status-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor};"></span>${statusText}
+                                </span>
+                            </div>
+                            <div class="service-label">وضعیت:</div>
+                        </div>
+                        <div class="card-row traffic-row">
+                            <div class="traffic-text">
+                                <span class="traffic-percent" style="color: ${progressColor};">${srv.percent}٪</span>
+                                مصرف ترافیک (${srv.used} از ${srv.total} گیگ)
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${srv.percent}%; background: linear-gradient(90deg, transparent, ${progressColor}); box-shadow: 0 0 10px ${progressColor};"></div>
+                        </div>
+                        <div class="card-row expire-row">
+                            <div class="expire-text">
+                                <span class="expire-days">⏳ ${srv.expireDays} روز دیگر</span>
+                            </div>
+                            <div class="service-label">انقضا:</div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn copy-btn" onclick="tg.showAlert('لینک سرویس شما کپی شد! (آزمایشی)')">کپی لینک 📋</button>
+                            <button class="action-btn renew-btn" onclick="sendAction('renew_${srv.id}')">تمدید سرویس 🔄</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
     </script>
 
 </body>
