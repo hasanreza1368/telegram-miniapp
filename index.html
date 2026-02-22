@@ -429,6 +429,70 @@
                 gap: 3px;
             }
         }
+
+        /* پس‌زمینه شیشه‌ای و تاریک پشت مودال */
+        .modal {
+            display: none;
+            /* در حالت عادی کاملا مخفی است */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            /* افکت بلور پس زمینه */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* بدنه خود پنل که بالا می‌آید */
+        .modal-content {
+            background: linear-gradient(180deg, rgba(30, 30, 45, 0.95) 0%, rgba(20, 20, 30, 0.98) 100%);
+            margin: 10% auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+            transform: translateY(50px);
+            transition: transform 0.3s ease;
+        }
+
+        /* انیمیشن باز شدن نرم */
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        /* استایل دکمه ضربدر (لوکس و نئونی) */
+        .close-btn {
+            background: rgba(255, 60, 60, 0.1);
+            color: #ff4d4d;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 60, 60, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #ff4d4d;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.6);
+        }
     </style>
 </head>
 
@@ -469,21 +533,26 @@
         </button>
     </div>
 
-    <!-- مودال سرویس‌های من -->
+    <!-- مودال سرویس‌های من (پاپ‌آپ شیشه‌ای) -->
     <div id="servicesModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>سرویس‌های فعال من 👤</h2>
-                <span class="close-btn" onclick="closeModal('servicesModal')">✖</span>
-            </div>
-            <!-- این بخش الان خالی است و توسط جاوااسکریپت پر می‌شود -->
-            <div class="modal-body" id="services-container">
-                <div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: 'Vazirmatn', sans-serif;">
-                    در حال دریافت اطلاعات از سرور... ⏳
+            <!-- هدر جدید و لوکس -->
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2); border-radius: 24px 24px 0 0;">
+                <div style="color: #fff; font-size: 17px; font-weight: bold; font-family: 'Vazirmatn', sans-serif;">
+                    سرویس‌های فعال من 👤
                 </div>
+                <!-- دکمه ضربدر با تابع جدید -->
+                <div class="close-btn" onclick="closeServicesModal()">✖</div>
+            </div>
+
+            <!-- ظرف نگهدارنده کارت‌ها -->
+            <div class="modal-body" id="services-container" style="padding: 20px;">
+                <!-- محتوا توسط جاوااسکریپت در اینجا ساخته می‌شود -->
             </div>
         </div>
     </div>
+
 
     <script>
         // اتصال نهایی و پاکسازی شده به تلگرام
@@ -535,22 +604,38 @@
             });
         }
         // تابع باز کردن مودال سرویس‌ها و شبیه‌سازی دریافت اطلاعات
+        // تابع باز کردن پنل با انیمیشن
         function openServicesModal() {
-            openModal('servicesModal');
+            const modal = document.getElementById('servicesModal');
+            modal.style.display = 'block';
+            // تاخیر کوچک برای اجرای انیمیشن CSS
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+
             document.getElementById('services-container').innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px; font-family: \'Vazirmatn\', sans-serif;">در حال دریافت اطلاعات از سرور... ⏳</div>';
 
-            // در مراحل بعدی، این اطلاعات مستقیماً از فایل bot.py شما میاد. 
-            // فعلا ۲ تا دیتای تستی میدیم که ظاهر کار رو برای چند سرویس ببینیم.
+            // دیتای تستی
             const sampleDataFromPython = [
                 { id: "uuid-1", name: "کانفیگ VIP آلمان", isActive: true, used: 32, total: 50, percent: 64, expireDays: 12 },
                 { id: "uuid-2", name: "سرور هلند - بکاپ", isActive: false, used: 45, total: 50, percent: 90, expireDays: 2 }
             ];
 
-            // شبیه‌سازی تاخیر اینترنت (بعد از 1 ثانیه کارت ها ساخته میشن)
             setTimeout(() => {
                 renderServices(sampleDataFromPython);
             }, 1000);
         }
+
+        // تابع جدید برای بستن پنل با انیمیشن
+        function closeServicesModal() {
+            const modal = document.getElementById('servicesModal');
+            modal.classList.remove('show'); // حذف افکت نمایش
+            // صبر می‌کنیم تا انیمیشن تمام شود بعد کامل مخفی می‌کنیم
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
 
         // تابع ساخت خودکار کارت‌های سرویس با ظاهر کاملا لوکس
         function renderServices(servicesArray) {
