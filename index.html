@@ -485,51 +485,6 @@
         </div>
     </div>
 
-
-    <!-- این کارت به صورت نمونه طراحی شده است (در آینده دیتا از ربات می‌آید) -->
-    <div class="info-card">
-        <div class="info-row">
-            <span class="text-gray">نام سرویس:</span>
-            <span class="text-cyan">💎 کانفیگ VIP آلمان</span>
-        </div>
-        <div class="info-row">
-            <span class="text-gray">وضعیت:</span>
-            <span>🟢 <b style="color:#38ef7d">متصل و فعال</b></span>
-        </div>
-
-        <div style="margin-top: 20px;">
-            <div class="info-row" style="margin-bottom: 5px;">
-                <span class="text-gray">مصرف ترافیک (۳۲ از ۵۰ گیگ)</span>
-                <span class="text-cyan">۶۵٪</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" style="width: 65%;"></div>
-            </div>
-        </div>
-
-        <div class="info-row" style="margin-top: 15px;">
-            <span class="text-gray">انقضا:</span>
-            <span style="color: #ffb86c">⏳ ۱۲ روز دیگر</span>
-        </div>
-
-        <div class="action-btn-group">
-            <button class="btn-sm-luxury btn-copy" onclick="copyToClipboard('vless://sample-link...')">📋 کپی
-                لینک</button>
-            <button class="btn-sm-luxury btn-renew"
-                onclick="tg.openTelegramLink('https://t.me/Mazhn_Network_bot?start=buy')">🔄 تمدید سرویس</button>
-        </div>
-    </div>
-
-    <!-- در صورت نداشتن سرویس (کامنت شده برای استفاده در آینده) -->
-    <!--
-        <div style="text-align: center; margin-top: 50px; color: #aaa;">
-            <span style="font-size: 3rem;">🪹</span>
-            <p>شما هیچ سرویس فعالی ندارید!</p>
-            <button class="btn-sm-luxury btn-renew" style="width: 100%; margin-top: 20px;">🛍 خرید سرویس جدید</button>
-        </div>
-        -->
-    </div>
-
     <script>
         // اتصال نهایی و پاکسازی شده به تلگرام
         const tg = window.Telegram.WebApp;
@@ -597,7 +552,7 @@
             }, 1000);
         }
 
-        // تابع ساخت خودکار کارت‌های سرویس
+        // تابع ساخت خودکار کارت‌های سرویس با ظاهر کاملا لوکس
         function renderServices(servicesArray) {
             const container = document.getElementById('services-container');
             container.innerHTML = ''; // پاک کردن متن لودینگ
@@ -608,46 +563,57 @@
             }
 
             servicesArray.forEach(srv => {
-                // رنگ و استایل بر اساس وضعیت فعال بودن
-                const statusClass = srv.isActive ? '' : 'style="color: #ff4d4d;"';
+                // تعیین رنگ‌ها بر اساس وضعیت و مصرف
                 const dotColor = srv.isActive ? '#00ffcc' : '#ff4d4d';
                 const statusText = srv.isActive ? 'متصل و فعال' : 'غیرفعال / اتمام';
                 const progressColor = srv.percent >= 90 ? '#ff4d4d' : (srv.percent >= 70 ? '#ffcc00' : '#00ffcc');
 
+                // ساختار کارت با استایل‌دهی مستقیم (تضمین ظاهر لوکس)
                 const card = `
-                    <div class="info-card">
-                        <div class="card-row">
-                            <div class="service-name">${srv.name} 💎</div>
-                            <div class="service-label">نام سرویس:</div>
-                        </div>
-                        <div class="card-row">
-                            <div class="service-status">
-                                <span class="status-badge" ${statusClass}>
-                                    <span class="status-dot" style="background: ${dotColor}; box-shadow: 0 0 8px ${dotColor};"></span>${statusText}
-                                </span>
-                            </div>
-                            <div class="service-label">وضعیت:</div>
-                        </div>
-                        <div class="card-row traffic-row">
-                            <div class="traffic-text">
-                                <span class="traffic-percent" style="color: ${progressColor};">${srv.percent}٪</span>
-                                مصرف ترافیک (${srv.used} از ${srv.total} گیگ)
-                            </div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${srv.percent}%; background: linear-gradient(90deg, transparent, ${progressColor}); box-shadow: 0 0 10px ${progressColor};"></div>
-                        </div>
-                        <div class="card-row expire-row">
-                            <div class="expire-text">
-                                <span class="expire-days">⏳ ${srv.expireDays} روز دیگر</span>
-                            </div>
-                            <div class="service-label">انقضا:</div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="action-btn copy-btn" onclick="tg.showAlert('لینک سرویس شما کپی شد! (آزمایشی)')">کپی لینک 📋</button>
-                            <button class="action-btn renew-btn" onclick="sendAction('renew_${srv.id}')">تمدید سرویس 🔄</button>
+                <div style="background: rgba(30, 30, 45, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); backdrop-filter: blur(8px);">
+                    
+                    <!-- ردیف نام سرویس -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="color: #a0a0b0; font-size: 13px;">نام سرویس:</div>
+                        <div style="color: #00e5ff; font-weight: bold; font-size: 15px; text-align: left;" dir="ltr">${srv.name} 💎</div>
+                    </div>
+
+                    <!-- ردیف وضعیت -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="color: #a0a0b0; font-size: 13px;">وضعیت:</div>
+                        <div style="color: ${dotColor}; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                            ${statusText} <div style="width: 12px; height: 12px; border-radius: 50%; background: ${dotColor}; box-shadow: 0 0 8px ${dotColor};"></div>
                         </div>
                     </div>
+
+                    <!-- ردیف مصرف ترافیک -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div style="color: #a0a0b0; font-size: 13px;">مصرف ترافیک (${srv.used} از ${srv.total} گیگ)</div>
+                        <div style="color: ${progressColor}; font-weight: bold; font-size: 15px;" dir="ltr">${srv.percent}٪</div>
+                    </div>
+
+                    <!-- نوار پیشرفت گرافیکی -->
+                    <div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 18px; position: relative;">
+                        <div style="position: absolute; right: 0; top: 0; width: ${srv.percent}%; height: 100%; background: linear-gradient(to left, ${progressColor}, transparent); box-shadow: 0 0 10px ${progressColor}; border-radius: 10px;"></div>
+                    </div>
+
+                    <!-- ردیف انقضا -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="color: #a0a0b0; font-size: 13px;">انقضا:</div>
+                        <div style="color: #ffaa00; font-weight: bold; font-size: 14px;">${srv.expireDays} روز دیگر ⏳</div>
+                    </div>
+
+                    <!-- دکمه‌های اکشن -->
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button onclick="tg.showAlert('لینک سرویس شما کپی شد!')" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
+                            کپی لینک 📋
+                        </button>
+                        <button onclick="sendAction('renew_${srv.id}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
+                            تمدید سرویس 🔄
+                        </button>
+                    </div>
+
+                </div>
                 `;
                 container.innerHTML += card;
             });
