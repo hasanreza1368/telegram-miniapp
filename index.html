@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <!-- متای ویوپورت بسیار مهم برای ریسپانسیو بودن در موبایل -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منوی اصلی ربات</title>
-    <!-- اتصال به تلگرام -->
+    
+    <!-- اتصال به تلگرام (فقط یک‌بار و در جای درست) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- اضافه کردن فونت شبنم -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v3.1.0/dist/font-face.css" rel="stylesheet"
-        type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v3.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
 
     <style>
         /* تنظیمات پایه */
-        * {
-            box-sizing: border-box;
-            /* جلوگیری از بهم ریختگی سایزها */
-        }
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Shabnam', sans-serif;
             margin: 0;
             padding: 15px;
-            /* پدینگ کمی کمتر برای گوشی‌های کوچک */
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #ffffff;
             overflow-x: hidden;
-
             /* پس‌زمینه لوکس متحرک */
             background: linear-gradient(-45deg, #0d1b2a, #1b263b, #415a77, #1e293b);
             background-size: 400% 400%;
@@ -39,30 +33,20 @@
         }
 
         @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* هدر منو */
         .header {
             font-size: clamp(1.2rem, 4vw, 1.5rem);
-            /* سایز هوشمند: بین 1.2 تا 1.5 بر اساس عرض صفحه */
             font-weight: bold;
             margin-bottom: 25px;
             margin-top: 5px;
             padding: 12px 30px;
             border-radius: 20px;
             text-align: center;
-
             /* استایل شیشه ای */
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -77,17 +61,14 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            /* فاصله بین دکمه ها */
             width: 100%;
             max-width: 450px;
-            /* جلوگیری از کش آمدن در تبلت و کامپیوتر */
         }
 
         /* استایل پایه دکمه ها */
         .btn {
             position: relative;
             padding: 18px 8px;
-            /* پدینگ داینامیک */
             border: none;
             border-radius: 16px;
             color: white;
@@ -105,7 +86,6 @@
             will-change: transform, box-shadow;
         }
 
-        /* استایل متن دکمه برای جلوگیری از بهم ریختگی */
         .btn span {
             position: relative;
             z-index: 2;
@@ -114,7 +94,6 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            /* اجازه شکستن خط به متن‌های طولانی را می‌دهد */
             gap: 5px;
             text-align: center;
             line-height: 1.4;
@@ -131,163 +110,35 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-full {
-            grid-column: span 2;
-        }
+        .btn-full { grid-column: span 2; }
 
-        /* -------------- انیمیشن‌های نوری (Shimmer) -------------- */
-        .btn::after {
-            content: '';
-            position: absolute;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .shimmer-lr::after {
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-            transform: skewX(-25deg);
-            animation: sweep-lr 4.5s infinite;
-        }
-
-        @keyframes sweep-lr {
-            0% {
-                left: -100%;
-            }
-
-            20%,
-            100% {
-                left: 200%;
-            }
-        }
-
-        .shimmer-rl::after {
-            top: 0;
-            right: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
-            transform: skewX(25deg);
-            animation: sweep-rl 5.2s infinite;
-        }
-
-        @keyframes sweep-rl {
-            0% {
-                right: -100%;
-            }
-
-            20%,
-            100% {
-                right: 200%;
-            }
-        }
-
-        .shimmer-tb::after {
-            top: -100%;
-            left: -50%;
-            width: 200%;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-            transform: rotate(15deg);
-            animation: sweep-tb 4s infinite;
-        }
-
-        @keyframes sweep-tb {
-            0% {
-                top: -100%;
-            }
-
-            20%,
-            100% {
-                top: 200%;
-            }
-        }
-
-        .shimmer-bt::after {
-            bottom: -100%;
-            left: -50%;
-            width: 200%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-            transform: rotate(-15deg);
-            animation: sweep-bt 4.8s infinite;
-        }
-
-        @keyframes sweep-bt {
-            0% {
-                bottom: -100%;
-            }
-
-            20%,
-            100% {
-                bottom: 200%;
-            }
-        }
+        /* انیمیشن‌های نوری (Shimmer) */
+        .btn::after { content: ''; position: absolute; z-index: 1; pointer-events: none; }
+        .shimmer-lr::after { top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0)); transform: skewX(-25deg); animation: sweep-lr 4.5s infinite; }
+        @keyframes sweep-lr { 0% { left: -100%; } 20%, 100% { left: 200%; } }
+        .shimmer-rl::after { top: 0; right: -100%; width: 50%; height: 100%; background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0)); transform: skewX(25deg); animation: sweep-rl 5.2s infinite; }
+        @keyframes sweep-rl { 0% { right: -100%; } 20%, 100% { right: 200%; } }
+        .shimmer-tb::after { top: -100%; left: -50%; width: 200%; height: 50%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)); transform: rotate(15deg); animation: sweep-tb 4s infinite; }
+        @keyframes sweep-tb { 0% { top: -100%; } 20%, 100% { top: 200%; } }
+        .shimmer-bt::after { bottom: -100%; left: -50%; width: 200%; height: 50%; background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)); transform: rotate(-15deg); animation: sweep-bt 4.8s infinite; }
+        @keyframes sweep-bt { 0% { bottom: -100%; } 20%, 100% { bottom: 200%; } }
 
         /* رنگ‌بندی دکمه‌ها */
-        .bg-buy {
-            background: linear-gradient(135deg, #FF416C, #FF4B2B);
-        }
+        .bg-buy { background: linear-gradient(135deg, #FF416C, #FF4B2B); }
+        .bg-myservices { background: linear-gradient(135deg, #1A2980, #26D0CE); }
+        .bg-free { background: linear-gradient(135deg, #F2994A, #F2C94C); color: #000; }
+        .bg-affiliate { background: linear-gradient(135deg, #11998e, #38ef7d); color: #000; }
+        .bg-download { background: linear-gradient(135deg, #8E2DE2, #4A00E0); }
+        .bg-channel { background: linear-gradient(135deg, #373B44, #4286f4); }
+        .bg-wallet { background: linear-gradient(135deg, #00b09b, #96c93d); color: #000; }
+        .bg-support { background: linear-gradient(135deg, #cb2d3e, #ef473a); }
 
-        .bg-myservices {
-            background: linear-gradient(135deg, #1A2980, #26D0CE);
-        }
-
-        .bg-free {
-            background: linear-gradient(135deg, #F2994A, #F2C94C);
-            color: #000;
-        }
-
-        .bg-affiliate {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            color: #000;
-        }
-
-        .bg-download {
-            background: linear-gradient(135deg, #8E2DE2, #4A00E0);
-        }
-
-        .bg-channel {
-            background: linear-gradient(135deg, #373B44, #4286f4);
-        }
-
-        .bg-wallet {
-            background: linear-gradient(135deg, #00b09b, #96c93d);
-            color: #000;
-        }
-
-        .bg-support {
-            background: linear-gradient(135deg, #cb2d3e, #ef473a);
-        }
-
-        /* -------------- مدیا کوئری برای ریسپانسیو 100% در گوشی های کوچک -------------- */
+        /* مدیا کوئری برای موبایل */
         @media screen and (max-width: 380px) {
-            .btn-grid {
-                gap: 10px;
-                /* کاهش فاصله بین دکمه ها در صفحه کوچک */
-            }
-
-            .btn {
-                padding: 12px 5px;
-                /* کاهش پدینگ */
-                font-size: 0.85rem;
-                /* کوچکتر شدن فونت */
-                border-radius: 12px;
-            }
-
-            .header {
-                padding: 10px 20px;
-                margin-bottom: 20px;
-            }
-
-            .btn span {
-                flex-direction: column;
-                /* اگر صفحه خیلی کوچک بود، آیکون میره بالای متن */
-                gap: 3px;
-            }
+            .btn-grid { gap: 10px; }
+            .btn { padding: 12px 5px; font-size: 0.85rem; border-radius: 12px; }
+            .header { padding: 10px 20px; margin-bottom: 20px; }
+            .btn span { flex-direction: column; gap: 3px; }
         }
     </style>
 </head>
@@ -297,48 +148,58 @@
     <div class="header">منوی اصلی 🏠</div>
 
     <div class="btn-grid">
-        <button class="btn bg-myservices shimmer-lr" onclick="sendData('my_services')">
+        <!-- استفاده از sendAction برای تمام دکمه‌ها -->
+        <button class="btn bg-myservices shimmer-lr" onclick="sendAction('services')">
             <span>سرویس‌های من 👤</span>
         </button>
-        <button class="btn bg-buy shimmer-rl" onclick="sendData('buy_service')">
+        <button class="btn bg-buy shimmer-rl" onclick="sendAction('buy')">
             <span>خرید سرویس 🛍</span>
         </button>
 
-        <button class="btn btn-full bg-free shimmer-tb" onclick="sendData('free_test')">
+        <button class="btn btn-full bg-free shimmer-tb" onclick="sendAction('free_test')">
             <span>دریافت اکانت تست (رایگان) 🎁</span>
         </button>
 
-        <button class="btn btn-full bg-affiliate shimmer-bt" onclick="sendData('affiliate')">
+        <button class="btn btn-full bg-affiliate shimmer-bt" onclick="sendAction('affiliate')">
             <span>همکاری در فروش (رایگان) 💰</span>
         </button>
 
-        <button class="btn bg-channel shimmer-rl" onclick="sendData('reports_channel')">
+        <button class="btn bg-channel shimmer-rl" onclick="sendAction('channel')">
             <span>کانال گزارشات 📢</span>
         </button>
-        <button class="btn bg-download shimmer-lr" onclick="sendData('download_app')">
+        <button class="btn bg-download shimmer-lr" onclick="sendAction('download')">
             <span>دانلود مستقیم برنامه 📥</span>
         </button>
 
-        <button class="btn bg-support shimmer-bt" onclick="sendData('support')">
+        <button class="btn bg-support shimmer-bt" onclick="sendAction('support')">
             <span>پشتیبانی 📞</span>
         </button>
-        <button class="btn bg-wallet shimmer-tb" onclick="sendData('wallet')">
+        <button class="btn bg-wallet shimmer-tb" onclick="sendAction('wallet')">
             <span>کیف پول 💳</span>
         </button>
     </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
+        // اتصال نهایی و پاکسازی شده به تلگرام
+        const tg = window.Telegram.WebApp;
         tg.expand();
-
         tg.setHeaderColor('#0d1b2a');
         tg.setBackgroundColor('#0d1b2a');
 
-        function sendData(action) {
-            tg.sendData(action);
+        function sendAction(action) {
+            // ویبره هپتیک
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            
+            // 🔴🔴🔴 آیدی ربات خود را اینجا وارد کنید (بدون @) 🔴🔴🔴
+            let botUsername = "Mazhn_Network_bot"; 
+            
+            // ارسال دستور مخفی به ربات و بستن مینی‌اپ
+            tg.openTelegramLink('https://t.me/' + botUsername + '?start=' + action);
+            tg.close();
         }
     </script>
 
 </body>
-
 </html>
