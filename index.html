@@ -743,14 +743,13 @@
 
                     <!-- 👇 دکمه‌ها با متن خودتان و رفع ارور کلیک -->
                     <div style="display: flex; gap: 12px; justify-content: center;">
-                        <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=gl_${srv.id}');" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
+                        <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=gl_${srv.id}'); window.Telegram.WebApp.close();" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
                             دریافت لینک 📋
                         </button>
-                        <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=rn_${srv.id}');" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
+                        <button onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/Mazhn_Network_bot?start=rn_${srv.id}'); window.Telegram.WebApp.close();" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
                             تمدید سرویس 🔄
                         </button>
                     </div>
-
                 </div>
                 `;
                 container.innerHTML += card;
