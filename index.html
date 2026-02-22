@@ -683,7 +683,7 @@
                     expiryText = 'نامحدود ♾️';
                 } else {
                     const now = new Date().getTime();
-                    const diff = srv.e - now;
+                    const diff = srv.e - now; // توجه: تایم‌استمپ پایتون میلی‌ثانیه است
                     if (diff <= 0) {
                         expiryText = 'منقضی شده ❌';
                         isExpired = true;
@@ -693,55 +693,60 @@
                     }
                 }
 
-                // 👇 تغییرات در متن وضعیت
-                const isActive = srv.s && !isExpired;
-                const dotColor = isActive ? '#00ffcc' : '#ff4d4d';
-                const statusText = isActive ? 'سرویس فعال (باز)' : 'مسدود / اتمام';
+                // 4. منطق جدید و دقیق وضعیت (پشتیبانی از آنلاین/آفلاین/مسدود)
+                let statusText = "⚪️ آفلاین";
+                let dotColor = "#a0a0b0"; // رنگ خاکستری
+                let glow = "0 0 8px rgba(160, 160, 176, 0.5)";
 
-                // 5. تعیین رنگ نوار پیشرفت بر اساس استایل شما
+                if (srv.s === false || isExpired) {
+                    statusText = "🔴 مسدود / اتمام";
+                    dotColor = "#ff4d4d"; // قرمز
+                    glow = "0 0 8px rgba(255, 77, 77, 0.8)";
+                } else if (srv.o === true) {
+                    statusText = "🟢 آنلاین (متصل)";
+                    dotColor = "#00ffcc"; // سبز
+                    glow = "0 0 12px rgba(0, 255, 204, 0.9)";
+                }
+
+                // 5. رنگ نوار پیشرفت دقیقا مطابق درصدهای کد خودتان (90 و 70)
                 const progressColor = percent >= 90 ? '#ff4d4d' : (percent >= 70 ? '#ffcc00' : '#00ffcc');
 
-                // 6. ساختار کارت با استایل‌دهی اصلی شما
+                // 6. ساختار کارت گرافیکی
                 const card = `
                 <div style="background: rgba(30, 30, 45, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); backdrop-filter: blur(8px);">
                     
-                    <!-- ردیف نام سرویس -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div style="color: #a0a0b0; font-size: 13px;">نام سرویس:</div>
                         <div style="color: #00e5ff; font-weight: bold; font-size: 15px; text-align: left;" dir="ltr">${name} 💎</div>
                     </div>
 
-                    <!-- ردیف وضعیت -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <div style="color: #a0a0b0; font-size: 13px;">وضعیت:</div>
-                        <div style="color: ${dotColor}; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 6px;">
-                            ${statusText} <div style="width: 12px; height: 12px; border-radius: 50%; background: ${dotColor}; box-shadow: 0 0 8px ${dotColor};"></div>
+                        <div style="color: #a0a0b0; font-size: 13px;">وضعیت اتصال:</div>
+                        <div style="color: ${dotColor}; font-weight: bold; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                            ${statusText} <div style="width: 12px; height: 12px; border-radius: 50%; background: ${dotColor}; box-shadow: ${glow};"></div>
                         </div>
                     </div>
 
-                    <!-- ردیف مصرف ترافیک -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                         <div style="color: #a0a0b0; font-size: 13px;">مصرف ترافیک (${usageGB} از ${limitGB} گیگ)</div>
                         <div style="color: ${progressColor}; font-weight: bold; font-size: 15px;" dir="ltr">${percent}٪</div>
                     </div>
 
-                    <!-- نوار پیشرفت گرافیکی -->
                     <div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 18px; position: relative;">
                         <div style="position: absolute; right: 0; top: 0; width: ${percent}%; height: 100%; background: linear-gradient(to left, ${progressColor}, transparent); box-shadow: 0 0 10px ${progressColor}; border-radius: 10px;"></div>
                     </div>
 
-                    <!-- ردیف انقضا -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div style="color: #a0a0b0; font-size: 13px;">انقضا:</div>
                         <div style="color: #ffaa00; font-weight: bold; font-size: 14px;">${expiryText}</div>
                     </div>
 
-                    <!-- 👇 تغییرات در دکمه‌ها (ارسال سیگنال به ربات) -->
+                    <!-- 👇 دکمه‌ها با متن خودتان و رفع ارور کلیک -->
                     <div style="display: flex; gap: 12px; justify-content: center;">
-                        <button onclick="tg.sendData('getlink_${name}')" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
+                        <button onclick="window.Telegram.WebApp.sendData('getlink_${name}'); window.Telegram.WebApp.close();" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
                             دریافت لینک 📋
                         </button>
-                        <button onclick="tg.sendData('renewreq_${name}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
+                        <button onclick="window.Telegram.WebApp.sendData('renewreq_${name}'); window.Telegram.WebApp.close();" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
                             تمدید سرویس 🔄
                         </button>
                     </div>
@@ -751,6 +756,7 @@
                 container.innerHTML += card;
             });
         }
+
 
     </script>
 
