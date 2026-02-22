@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <!-- متای ویوپورت بسیار مهم برای ریسپانسیو بودن در موبایل -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>منوی اصلی ربات</title>
-    
+
     <!-- اتصال به تلگرام (فقط یک‌بار و در جای درست) -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- اضافه کردن فونت شبنم -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v3.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v3.1.0/dist/font-face.css" rel="stylesheet"
+        type="text/css" />
 
     <style>
         /* تنظیمات پایه */
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Shabnam', sans-serif;
@@ -33,9 +37,17 @@
         }
 
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* هدر منو */
@@ -110,35 +122,312 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-full { grid-column: span 2; }
+        .btn-full {
+            grid-column: span 2;
+        }
 
         /* انیمیشن‌های نوری (Shimmer) */
-        .btn::after { content: ''; position: absolute; z-index: 1; pointer-events: none; }
-        .shimmer-lr::after { top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0)); transform: skewX(-25deg); animation: sweep-lr 4.5s infinite; }
-        @keyframes sweep-lr { 0% { left: -100%; } 20%, 100% { left: 200%; } }
-        .shimmer-rl::after { top: 0; right: -100%; width: 50%; height: 100%; background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0)); transform: skewX(25deg); animation: sweep-rl 5.2s infinite; }
-        @keyframes sweep-rl { 0% { right: -100%; } 20%, 100% { right: 200%; } }
-        .shimmer-tb::after { top: -100%; left: -50%; width: 200%; height: 50%; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)); transform: rotate(15deg); animation: sweep-tb 4s infinite; }
-        @keyframes sweep-tb { 0% { top: -100%; } 20%, 100% { top: 200%; } }
-        .shimmer-bt::after { bottom: -100%; left: -50%; width: 200%; height: 50%; background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0)); transform: rotate(-15deg); animation: sweep-bt 4.8s infinite; }
-        @keyframes sweep-bt { 0% { bottom: -100%; } 20%, 100% { bottom: 200%; } }
+        .btn::after {
+            content: '';
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .shimmer-lr::after {
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+            transform: skewX(-25deg);
+            animation: sweep-lr 4.5s infinite;
+        }
+
+        @keyframes sweep-lr {
+            0% {
+                left: -100%;
+            }
+
+            20%,
+            100% {
+                left: 200%;
+            }
+        }
+
+        .shimmer-rl::after {
+            top: 0;
+            right: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+            transform: skewX(25deg);
+            animation: sweep-rl 5.2s infinite;
+        }
+
+        @keyframes sweep-rl {
+            0% {
+                right: -100%;
+            }
+
+            20%,
+            100% {
+                right: 200%;
+            }
+        }
+
+        .shimmer-tb::after {
+            top: -100%;
+            left: -50%;
+            width: 200%;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+            transform: rotate(15deg);
+            animation: sweep-tb 4s infinite;
+        }
+
+        @keyframes sweep-tb {
+            0% {
+                top: -100%;
+            }
+
+            20%,
+            100% {
+                top: 200%;
+            }
+        }
+
+        .shimmer-bt::after {
+            bottom: -100%;
+            left: -50%;
+            width: 200%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+            transform: rotate(-15deg);
+            animation: sweep-bt 4.8s infinite;
+        }
+
+        @keyframes sweep-bt {
+            0% {
+                bottom: -100%;
+            }
+
+            20%,
+            100% {
+                bottom: 200%;
+            }
+        }
 
         /* رنگ‌بندی دکمه‌ها */
-        .bg-buy { background: linear-gradient(135deg, #FF416C, #FF4B2B); }
-        .bg-myservices { background: linear-gradient(135deg, #1A2980, #26D0CE); }
-        .bg-free { background: linear-gradient(135deg, #F2994A, #F2C94C); color: #000; }
-        .bg-affiliate { background: linear-gradient(135deg, #11998e, #38ef7d); color: #000; }
-        .bg-download { background: linear-gradient(135deg, #8E2DE2, #4A00E0); }
-        .bg-channel { background: linear-gradient(135deg, #373B44, #4286f4); }
-        .bg-wallet { background: linear-gradient(135deg, #00b09b, #96c93d); color: #000; }
-        .bg-support { background: linear-gradient(135deg, #cb2d3e, #ef473a); }
+        .bg-buy {
+            background: linear-gradient(135deg, #FF416C, #FF4B2B);
+        }
+
+        .bg-myservices {
+            background: linear-gradient(135deg, #1A2980, #26D0CE);
+        }
+
+        .bg-free {
+            background: linear-gradient(135deg, #F2994A, #F2C94C);
+            color: #000;
+        }
+
+        .bg-affiliate {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #000;
+        }
+
+        .bg-download {
+            background: linear-gradient(135deg, #8E2DE2, #4A00E0);
+        }
+
+        .bg-channel {
+            background: linear-gradient(135deg, #373B44, #4286f4);
+        }
+
+        .bg-wallet {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: #000;
+        }
+
+        .bg-support {
+            background: linear-gradient(135deg, #cb2d3e, #ef473a);
+        }
+
+        /* پنل کشویی لوکس برای نمایش جزئیات داخلی */
+        .luxury-modal {
+            position: fixed;
+            bottom: -100%;
+            /* در حالت عادی مخفی در پایین */
+            left: 0;
+            width: 100%;
+            height: 85vh;
+            /* 85 درصد ارتفاع صفحه */
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(25px) saturate(150%);
+            -webkit-backdrop-filter: blur(25px) saturate(150%);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            box-shadow: 0 -10px 40px rgba(0, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 100;
+            padding: 25px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* وقتی پنل فعال می‌شود بالا می‌آید */
+        .luxury-modal.active {
+            bottom: 0;
+        }
+
+        /* خط تزیینی بالای پنل برای القای حس کشویی بودن */
+        .modal-drag-indicator {
+            width: 50px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 0 auto 20px auto;
+        }
+
+        /* استایل تیتر صفحه جزئیات */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* دکمه بستن پنل */
+        .close-modal-btn {
+            background: rgba(255, 50, 50, 0.2);
+            border: 1px solid rgba(255, 50, 50, 0.4);
+            color: #ff4d4d;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-modal-btn:hover {
+            background: #ff4d4d;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+        }
+
+        /* استایل کارت‌های داخلی (مثلا کارت نمایش حجم) */
+        .info-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* نوار وضعیت حجم مصرفی */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            width: 65%;
+            /* این به صورت داینامیک پر می‌شود */
+            border-radius: 10px;
+            box-shadow: 0 0 10px #00f2fe;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .text-cyan {
+            color: #00f2fe;
+            font-weight: bold;
+        }
+
+        .text-gray {
+            color: #aaa;
+        }
+
+        /* دکمه‌های عملیاتی داخل پنل */
+        .action-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-sm-luxury {
+            flex: 1;
+            padding: 12px;
+            border-radius: 15px;
+            border: none;
+            font-family: 'Shabnam', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-renew {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.3);
+        }
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            backdrop-filter: blur(5px);
+        }
 
         /* مدیا کوئری برای موبایل */
         @media screen and (max-width: 380px) {
-            .btn-grid { gap: 10px; }
-            .btn { padding: 12px 5px; font-size: 0.85rem; border-radius: 12px; }
-            .header { padding: 10px 20px; margin-bottom: 20px; }
-            .btn span { flex-direction: column; gap: 3px; }
+            .btn-grid {
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 12px 5px;
+                font-size: 0.85rem;
+                border-radius: 12px;
+            }
+
+            .header {
+                padding: 10px 20px;
+                margin-bottom: 20px;
+            }
+
+            .btn span {
+                flex-direction: column;
+                gap: 3px;
+            }
         }
     </style>
 </head>
@@ -148,8 +437,8 @@
     <div class="header">منوی اصلی 🏠</div>
 
     <div class="btn-grid">
-        <!-- استفاده از sendAction برای تمام دکمه‌ها -->
-        <button class="btn bg-myservices shimmer-lr" onclick="sendAction('services')">
+        <!-- در اینجا onclick برای باز کردن پنل لوکس تغییر کرده است -->
+        <button class="btn bg-myservices shimmer-lr" onclick="openModal('servicesModal')">
             <span>سرویس‌های من 👤</span>
         </button>
         <button class="btn bg-buy shimmer-rl" onclick="sendAction('buy')">
@@ -179,6 +468,59 @@
         </button>
     </div>
 
+    <!-- پنل کشویی سرویس‌های من -->
+    <div id="servicesModal" class="luxury-modal">
+        <div class="modal-drag-indicator"></div>
+
+        <div class="modal-header">
+            <div class="modal-title">👤 سرویس‌های فعال من</div>
+            <button class="close-modal-btn" onclick="closeModal('servicesModal')">✖</button>
+        </div>
+
+        <!-- این کارت به صورت نمونه طراحی شده است (در آینده دیتا از ربات می‌آید) -->
+        <div class="info-card">
+            <div class="info-row">
+                <span class="text-gray">نام سرویس:</span>
+                <span class="text-cyan">💎 کانفیگ VIP آلمان</span>
+            </div>
+            <div class="info-row">
+                <span class="text-gray">وضعیت:</span>
+                <span>🟢 <b style="color:#38ef7d">متصل و فعال</b></span>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div class="info-row" style="margin-bottom: 5px;">
+                    <span class="text-gray">مصرف ترافیک (۳۲ از ۵۰ گیگ)</span>
+                    <span class="text-cyan">۶۵٪</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+
+            <div class="info-row" style="margin-top: 15px;">
+                <span class="text-gray">انقضا:</span>
+                <span style="color: #ffb86c">⏳ ۱۲ روز دیگر</span>
+            </div>
+
+            <div class="action-btn-group">
+                <button class="btn-sm-luxury btn-copy" onclick="copyToClipboard('vless://sample-link...')">📋 کپی
+                    لینک</button>
+                <button class="btn-sm-luxury btn-renew"
+                    onclick="tg.openTelegramLink('https://t.me/Mazhn_Network_bot?start=buy')">🔄 تمدید سرویس</button>
+            </div>
+        </div>
+
+        <!-- در صورت نداشتن سرویس (کامنت شده برای استفاده در آینده) -->
+        <!--
+        <div style="text-align: center; margin-top: 50px; color: #aaa;">
+            <span style="font-size: 3rem;">🪹</span>
+            <p>شما هیچ سرویس فعالی ندارید!</p>
+            <button class="btn-sm-luxury btn-renew" style="width: 100%; margin-top: 20px;">🛍 خرید سرویس جدید</button>
+        </div>
+        -->
+    </div>
+
     <script>
         // اتصال نهایی و پاکسازی شده به تلگرام
         const tg = window.Telegram.WebApp;
@@ -191,15 +533,45 @@
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
-            
+
             // 🔴🔴🔴 آیدی ربات خود را اینجا وارد کنید (بدون @) 🔴🔴🔴
-            let botUsername = "Mazhn_Network_bot"; 
-            
+            let botUsername = "Mazhn_Network_bot";
+
             // ارسال دستور مخفی به ربات و بستن مینی‌اپ
             tg.openTelegramLink('https://t.me/' + botUsername + '?start=' + action);
             tg.close();
         }
+
+        // تابع باز کردن پنل لوکس
+        function openModal(modalId) {
+            // ویبره لمسی (Haptic Feedback) برای حس پریمیوم
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        // تابع بستن پنل
+        function closeModal(modalId) {
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.HapticFeedback.selectionChanged();
+            }
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // تابع کپی کردن شیک
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                if (window.Telegram && Telegram.WebApp) {
+                    Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                    Telegram.WebApp.showAlert('✅ لینک ک!');
+                } else {
+                    alert('✅ کپی شد!');
+                }
+            });
+        }
     </script>
 
 </body>
+
 </html>
