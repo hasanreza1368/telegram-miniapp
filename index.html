@@ -657,25 +657,58 @@
             const container = document.getElementById('services-container');
             container.innerHTML = ''; // پاک کردن متن لودینگ
 
-            if (servicesArray.length === 0) {
+            if (!servicesArray || servicesArray.length === 0) {
                 container.innerHTML = '<div style="text-align: center; color: #a0a0b0; padding: 30px;">شما هیچ سرویس فعالی ندارید ❌</div>';
                 return;
             }
 
             servicesArray.forEach(srv => {
-                // تعیین رنگ‌ها بر اساس وضعیت و مصرف
-                const dotColor = srv.isActive ? '#00ffcc' : '#ff4d4d';
-                const statusText = srv.isActive ? 'متصل و فعال' : 'غیرفعال / اتمام';
-                const progressColor = srv.percent >= 90 ? '#ff4d4d' : (srv.percent >= 70 ? '#ffcc00' : '#00ffcc');
+                // 1. استخراج داده‌های فشرده از پایتون
+                const name = srv.n || 'سرویس من';
 
-                // ساختار کارت با استایل‌دهی مستقیم (تضمین ظاهر لوکس)
+                // 2. محاسبات حجم (بایت به گیگابایت)
+                const usageGB = (srv.u / (1024 ** 3)).toFixed(2);
+                const limitGB = srv.l === 0 ? 'نامحدود' : (srv.l / (1024 ** 3)).toFixed(2);
+
+                let percent = 0;
+                if (srv.l > 0) {
+                    percent = ((srv.u / srv.l) * 100).toFixed(1);
+                    if (percent > 100) percent = 100;
+                }
+
+                // 3. محاسبه تاریخ انقضا
+                let expiryText = '';
+                let isExpired = false;
+                if (srv.e <= 0) {
+                    expiryText = 'نامحدود ♾️';
+                } else {
+                    const now = new Date().getTime();
+                    const diff = srv.e - now;
+                    if (diff <= 0) {
+                        expiryText = 'منقضی شده ❌';
+                        isExpired = true;
+                    } else {
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        expiryText = `${days} روز دیگر ⏳`;
+                    }
+                }
+
+                // 4. تعیین وضعیت نهایی (اگر منقضی شده باشد یا از پنل قطع باشد، قرمز می‌شود)
+                const isActive = srv.s && !isExpired;
+                const dotColor = isActive ? '#00ffcc' : '#ff4d4d';
+                const statusText = isActive ? 'متصل و فعال' : 'غیرفعال / اتمام';
+
+                // 5. تعیین رنگ نوار پیشرفت بر اساس استایل شما
+                const progressColor = percent >= 90 ? '#ff4d4d' : (percent >= 70 ? '#ffcc00' : '#00ffcc');
+
+                // 6. ساختار کارت با استایل‌دهی اصلی شما
                 const card = `
                 <div style="background: rgba(30, 30, 45, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px; margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); backdrop-filter: blur(8px);">
                     
                     <!-- ردیف نام سرویس -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <div style="color: #a0a0b0; font-size: 13px;">نام سرویس:</div>
-                        <div style="color: #00e5ff; font-weight: bold; font-size: 15px; text-align: left;" dir="ltr">${srv.name} 💎</div>
+                        <div style="color: #00e5ff; font-weight: bold; font-size: 15px; text-align: left;" dir="ltr">${name} 💎</div>
                     </div>
 
                     <!-- ردیف وضعیت -->
@@ -688,19 +721,19 @@
 
                     <!-- ردیف مصرف ترافیک -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <div style="color: #a0a0b0; font-size: 13px;">مصرف ترافیک (${srv.used} از ${srv.total} گیگ)</div>
-                        <div style="color: ${progressColor}; font-weight: bold; font-size: 15px;" dir="ltr">${srv.percent}٪</div>
+                        <div style="color: #a0a0b0; font-size: 13px;">مصرف ترافیک (${usageGB} از ${limitGB} گیگ)</div>
+                        <div style="color: ${progressColor}; font-weight: bold; font-size: 15px;" dir="ltr">${percent}٪</div>
                     </div>
 
                     <!-- نوار پیشرفت گرافیکی -->
                     <div style="width: 100%; background: rgba(255,255,255,0.05); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 18px; position: relative;">
-                        <div style="position: absolute; right: 0; top: 0; width: ${srv.percent}%; height: 100%; background: linear-gradient(to left, ${progressColor}, transparent); box-shadow: 0 0 10px ${progressColor}; border-radius: 10px;"></div>
+                        <div style="position: absolute; right: 0; top: 0; width: ${percent}%; height: 100%; background: linear-gradient(to left, ${progressColor}, transparent); box-shadow: 0 0 10px ${progressColor}; border-radius: 10px;"></div>
                     </div>
 
                     <!-- ردیف انقضا -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <div style="color: #a0a0b0; font-size: 13px;">انقضا:</div>
-                        <div style="color: #ffaa00; font-weight: bold; font-size: 14px;">${srv.expireDays} روز دیگر ⏳</div>
+                        <div style="color: #ffaa00; font-weight: bold; font-size: 14px;">${expiryText}</div>
                     </div>
 
                     <!-- دکمه‌های اکشن -->
@@ -708,7 +741,7 @@
                         <button onclick="tg.showAlert('لینک سرویس شما کپی شد!')" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
                             کپی لینک 📋
                         </button>
-                        <button onclick="sendAction('renew_${srv.id}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
+                        <button onclick="tg.sendData('renew_${name}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
                             تمدید سرویس 🔄
                         </button>
                     </div>
@@ -718,6 +751,7 @@
                 container.innerHTML += card;
             });
         }
+
 
     </script>
 
