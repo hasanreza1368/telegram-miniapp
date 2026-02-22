@@ -693,10 +693,10 @@
                     }
                 }
 
-                // 4. تعیین وضعیت نهایی (اگر منقضی شده باشد یا از پنل قطع باشد، قرمز می‌شود)
+                // 👇 تغییرات در متن وضعیت
                 const isActive = srv.s && !isExpired;
                 const dotColor = isActive ? '#00ffcc' : '#ff4d4d';
-                const statusText = isActive ? 'متصل و فعال' : 'غیرفعال / اتمام';
+                const statusText = isActive ? 'سرویس فعال (باز)' : 'مسدود / اتمام';
 
                 // 5. تعیین رنگ نوار پیشرفت بر اساس استایل شما
                 const progressColor = percent >= 90 ? '#ff4d4d' : (percent >= 70 ? '#ffcc00' : '#00ffcc');
@@ -736,12 +736,12 @@
                         <div style="color: #ffaa00; font-weight: bold; font-size: 14px;">${expiryText}</div>
                     </div>
 
-                    <!-- دکمه‌های اکشن -->
+                    <!-- 👇 تغییرات در دکمه‌ها (ارسال سیگنال به ربات) -->
                     <div style="display: flex; gap: 12px; justify-content: center;">
-                        <button onclick="tg.showAlert('لینک سرویس شما کپی شد!')" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
-                            کپی لینک 📋
+                        <button onclick="tg.sendData('getlink_${name}')" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-size: 13px; cursor: pointer; transition: 0.3s;">
+                            دریافت لینک 📋
                         </button>
-                        <button onclick="tg.sendData('renew_${name}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
+                        <button onclick="tg.sendData('renewreq_${name}')" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #00ffcc, #0099ff); color: #fff; border: none; border-radius: 12px; font-family: 'Vazirmatn', sans-serif; font-weight: bold; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 255, 204, 0.25);">
                             تمدید سرویس 🔄
                         </button>
                     </div>
@@ -751,7 +751,6 @@
                 container.innerHTML += card;
             });
         }
-
 
     </script>
 
